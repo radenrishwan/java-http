@@ -28,30 +28,25 @@ public class Preview {
                     </div>
                \s
                     <script>
-                        // --- DATETIME ANIMATION ---
                         const timeElement = document.getElementById('time');
                         const dateElement = document.getElementById('date');
                \s
                         function updateDateTime() {
                             const now = new Date();
                \s
-                            // Format Time (HH:MM:SS) with a little "ticking" effect on the colon
                             const hours = String(now.getHours()).padStart(2, '0');
                             const minutes = String(now.getMinutes()).padStart(2, '0');
                             const seconds = String(now.getSeconds()).padStart(2, '0');
                             const colon = seconds % 2 === 0 ? '<span class="opacity-50">:</span>' : ':';
                             timeElement.innerHTML = `${hours}${colon}${minutes}${colon}${seconds}`;
                \s
-                            // Format Date (Day, Month Date, Year)
                             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
                             dateElement.textContent = now.toLocaleDateString('en-US', options);
                         }
                \s
-                        // Update the date and time every second
                         setInterval(updateDateTime, 1000);
-                        updateDateTime(); // Initial call to display immediately
+                        updateDateTime();
                \s
-                        // --- FIREWORKS ANIMATION ---
                         const canvas = document.getElementById('fireworksCanvas');
                         const ctx = canvas.getContext('2d');
                         canvas.width = window.innerWidth;
@@ -65,7 +60,6 @@ public class Preview {
                             return `hsl(${hue}, 100%, 50%)`;
                         }
                \s
-                        // Represents a single firework rocket or an explosion particle
                         class Particle {
                             constructor(x, y, color, velocity) {
                                 this.x = x;
@@ -98,7 +92,6 @@ public class Preview {
                             }
                         }
                \s
-                        // Represents the main firework rocket that explodes
                         class Firework extends Particle {
                              constructor(x, y, color) {
                                 super(x, y, color, {\s
@@ -110,10 +103,9 @@ public class Preview {
                \s
                              update() {
                                 super.update();
-                                // When the rocket slows down at its peak, it explodes
                                 if (this.velocity.y >= 0) {
                                     this.explode();
-                                    this.alpha = 0; // Hide the original rocket
+                                    this.alpha = 0;
                                 }
                              }
                \s
@@ -132,16 +124,13 @@ public class Preview {
                \s
                         function animate() {
                             requestAnimationFrame(animate);
-                            // Create a trailing effect by drawing a semi-transparent rectangle
                             ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
                             ctx.fillRect(0, 0, canvas.width, canvas.height);
                \s
-                            // Launch new fireworks randomly
                             if (Math.random() < 0.03) {
                                  fireworks.push(new Firework(Math.random() * canvas.width, canvas.height, randomColor()));
                             }
                \s
-                            // Update and draw fireworks
                             fireworks.forEach((firework, index) => {
                                 if (firework.alpha <= 0) {
                                     fireworks.splice(index, 1);
@@ -150,7 +139,6 @@ public class Preview {
                                 }
                             });
                \s
-                            // Update and draw explosion particles
                             particles.forEach((particle, index) => {
                                 if (particle.alpha <= 0) {
                                     particles.splice(index, 1);

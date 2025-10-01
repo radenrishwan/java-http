@@ -1,14 +1,40 @@
-# Build stage
-FROM gradle:latest AS build
-WORKDIR /usr/app/
-COPY . .
-RUN gradle build
+# Multi-stage build for Java application with Gradle
 
-# Package stage
-FROM openjdk:latest
-ENV JAR_NAME=app.jar
-ENV APP_HOME=/usr/app/
-WORKDIR $APP_HOME
-COPY --from=build $APP_HOME/build/libs/$JAR_NAME .
+# Build stage
+FROM gradle:8.4-jdk17 AS build
+
+# Set working directory
+WORKDIR /app
+
+# Copy Gradle wrapper and build files
+COPY gradlew .
+COPY gradle/ gradle/
+COPY build.gradle.kts .
+COPY settings.gradle.kts .
+
+# Copy source code
+COPY src/ src/
+
+# Make gradlew executable
+RUN chmod +x gradlew
+
+# Build the application
+RUN ./gradlew build --no-daemon
+
+# Runtime stage
+FROM openjdk:26-slim-bookworm
+
+# Set working directory
+WORKDIR /app
+
+# Copy the built JAR from build stage
+COPY --from=build /app/build/libs/*.jar app.jar
+
+# Expose the port (default 8080, can be overridden with PORT env var)
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+
+# Set default environment variables
+ENV PORT=8080
+
+# Run the application
+CMD ["java", "-jar", "app.jar"]
