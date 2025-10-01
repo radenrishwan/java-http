@@ -6,7 +6,11 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        Server server = new Server(8080);
+        int port = System.getenv("PORT") != null ? Integer.parseInt(System.getenv("PORT")) : 8080;
+
+        System.out.println("PORT: " + port);
+
+        Server server = new Server(port);
 
         try {
             server.start();
