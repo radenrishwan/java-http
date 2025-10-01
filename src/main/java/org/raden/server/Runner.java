@@ -37,7 +37,6 @@ public class Runner implements Runnable {
             response.body = Preview.html();
 
             out.println(response.parse());
-
         } catch (IOException e) {
             System.err.println("An error occurred with client " + socket.getInetAddress() + ": " + e.getMessage());
         } finally {

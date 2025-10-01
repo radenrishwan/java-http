@@ -24,7 +24,6 @@ public class Response {
 
         responseStringBuilder.append(this.version + " " + this.code.toString() + "\r\n");
 
-        // change content-length body
         this.headers.put("Content-Length", String.valueOf(body.length()));
 
         responseStringBuilder.append(this.parseHeader());
