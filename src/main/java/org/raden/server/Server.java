@@ -12,6 +12,7 @@ public class Server {
 
     public Server(int port) throws IOException {
         this.serverSocket = new ServerSocket(port);
+        this.serverSocket.bind(new InetSocketAddress("0.0.0.0", port));
     }
 
     public void start() throws IOException {
